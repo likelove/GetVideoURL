@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<html lang="zh">
+ <head>
+  <meta charset="utf-8" />
+  <meta name = "viewport" content = "initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no">
+  <title>墙外在线视频地址获取</title>
+ </head>
+ <body>
+  <header>
+    <h1>RedTubr&xHamster在线视频地址获取</h1>
+  </header>
+	<hr />
+		<div>
+			<span>在线视频地址</span><br />
+			<input type="text" id="weburl" value="http://" onfocus=" this.select();"  style="width:512px;"/><input type="button" value="解析" onclick="urljx();"/><input type="button" value="组合" onclick="urlzh();"/><br />
+			<span>网站主机</span><br />
+			<select id="webhost" style="width:120px;">
+				<option value="xhm">xhamster.com</option>
+				<option value="rtb">redtube.com</option>
+			</select><br />
+			<span>特征码</span><br />
+			<input type="text" onfocus=" this.select();" id="webcode" value="" style="width:100px;"/><br />
+			<input type="button" value="获取" onclick="getv();" />
+		</div>
+	<hr />
+		<div>
+			<span>MP4格式地址</span><br />
+			<input type="text" id="webmp4" value="" onfocus=" this.select();" style="width:1024px;"/><br />
+			<span>FLV格式地址</span><br />
+			<input type="text" id="webflv" value="" onfocus=" this.select();" style="width:1024px;"/><br />
+			<span>封面图片地址</span><br />
+			<input type="text" id="webpic" value="" onfocus=" this.select();" style="width:512px;"/><br />
+		</div>
+	<hr />
+  <footer>
+   <p>Cara 2015 制作</p>
+   <script type="text/javascript">
+		function getv(){
+			var url = "https://php54-feelsix.rhcloud.com/x3vurl/index.php?cb=showv&h="+ document.getElementById("webhost").value + "&c=" + document.getElementById("webcode").value;
+			var script = document.createElement('script');
+			script.type="text/javascript"; 
+			script.setAttribute('src', url);
+			document.getElementsByTagName('head')[0].appendChild(script);
+		}
+		function showv(result){
+			document.getElementById("webmp4").value=result.mp4;
+			document.getElementById("webflv").value=result.flv;
+			document.getElementById("webpic").value=result.pic;
+		}
+		function urljx(){
+			var patt1=new RegExp("redtube.com/[0-9]{5,8}","i");
+			var patt2=new RegExp("xhamster.com/[0-9]{5,8}","i");
+			urlstr=document.getElementById("weburl").value;
+			if(patt1.test(urlstr)){document.getElementById("webhost").value="rtb";}
+			if(patt2.test(urlstr)){document.getElementById("webhost").value="xhm";}
+			document.getElementById("webcode").value=urlstr.match("[0-9]{5,8}")
+		}
+		function urlzh(){
+			if(document.getElementById("webhost").value=="rtb"){document.getElementById("weburl").value='http://www.redtube.com/'+document.getElementById("webcode").value}
+			if(document.getElementById("webhost").value=="xhm"){document.getElementById("weburl").value='http://xhamster.com/'+document.getElementById("webcode").value+'/0_1_2.html'}
+		}
+   </script>
+  </footer>
+ </body>
+</html>
