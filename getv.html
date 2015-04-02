@@ -12,7 +12,7 @@
 	<hr />
 		<div>
 			<span>在线视频地址</span><br />
-			<input type="text" id="weburl" value="http://" onfocus=" this.select();"  style="width:512px;"/><input type="button" value="解析" onclick="urljx();"/><input type="button" value="组合" onclick="urlzh();"/><br />
+			<input type="text" id="weburl" value="http://" onfocus=" this.select();"  style="width:512px;"/><input type="button" value="解析" onclick="urljx();getv();"/><input type="button" value="组合" onclick="urlzh();"/><br />
 			<span>网站主机</span><br />
 			<select id="webhost" style="width:120px;">
 				<option value="xhm">xhamster.com</option>
@@ -24,13 +24,16 @@
 		</div>
 	<hr />
 		<div>
+			<span>视频标题</span><br />
+			<input type="text" id="webtitle" value="" onfocus=" this.select();" style="width:512px;"/><br />
 			<span>MP4格式地址</span><br />
 			<input type="text" id="webmp4" value="" onfocus=" this.select();" style="width:1024px;"/><br />
 			<span>FLV格式地址</span><br />
 			<input type="text" id="webflv" value="" onfocus=" this.select();" style="width:1024px;"/><br />
 			<span>封面图片地址</span><br />
-			<input type="text" id="webpic" value="" onfocus=" this.select();" style="width:512px;"/><br />
+			<input type="text" id="webpic" value="" onfocus=" this.select();" style="width:768px;"/><br />
 		</div>
+		<div id='pic'>图片预览区</div>
 	<hr />
   <footer>
    <p>Cara 2015 制作</p>
@@ -43,9 +46,11 @@
 			document.getElementsByTagName('head')[0].appendChild(script);
 		}
 		function showv(result){
+			document.getElementById("webtitle").value=result.title;
 			document.getElementById("webmp4").value=result.mp4;
 			document.getElementById("webflv").value=result.flv;
 			document.getElementById("webpic").value=result.pic;
+			loadpic(result.pic);
 		}
 		function urljx(){
 			var patt1=new RegExp("redtube.com/[0-9]{5,8}","i");
@@ -58,6 +63,11 @@
 		function urlzh(){
 			if(document.getElementById("webhost").value=="rtb"){document.getElementById("weburl").value='http://www.redtube.com/'+document.getElementById("webcode").value}
 			if(document.getElementById("webhost").value=="xhm"){document.getElementById("weburl").value='http://xhamster.com/'+document.getElementById("webcode").value+'/0_1_2.html'}
+		}
+		function loadpic(picurl){
+       var imgID = new Image(); 
+       imgID.src = picurl; 
+       imgID.onload = function(){document.getElementById("pic").innerHTML = "<img src="+imgID.src+" />";}
 		}
    </script>
   </footer>
