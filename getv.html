@@ -3,17 +3,17 @@
  <head>
   <meta charset="utf-8" />
   <meta name = "viewport" content = "initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no">
-  <title>墙外在线视频地址获取</title>
+  <title>凿壁偷光</title>
  </head>
  <body style="margin:0px 100px 0px 100px;">
   <header>
-    <h1>RedTubr&xHamster在线视频地址获取</h1>
+    <h1>GFW外在线3X视频地址解析</h1>
   </header>
 	<hr />
 		<div>
-			<span>在线视频地址</span><br />
-			<input type="text" id="weburl" value="http://" onfocus=" this.select();"  style="width:512px;"/><input type="button" value="解析" onclick="urljx();getv();"/><input type="button" value="组合" onclick="urlzh();"/><br />
-			<span>网站主机</span><br />
+			<span>在线视频播放地址</span><br />
+			<input type="text" id="weburl" value="http://" onfocus=" this.select();"  style="width:512px;"/><input type="button" value="解析&获取" onclick="urljx();getv();"/><input type="button" value="组合" onclick="urlzh();"/><br />
+			<span>网站</span><br />
 			<select id="webhost" style="width:120px;">
 				<option value="xhm">xhamster.com</option>
 				<option value="rtb">redtube.com</option>
@@ -24,21 +24,22 @@
 		</div>
 	<hr />
 		<div>
-			<span>视频标题</span><br />
+			<span>标题</span><br />
 			<input type="text" id="webtitle" value="" onfocus=" this.select();" style="width:512px;"/><br />
-			<span>MP4格式地址</span><br />
+			<span>MP4地址</span><br />
 			<input type="text" id="webmp4" value="" onfocus=" this.select();" style="width:1024px;"/><br />
-			<span>FLV格式地址</span><br />
+			<span>FLV地址</span><br />
 			<input type="text" id="webflv" value="" onfocus=" this.select();" style="width:1024px;"/><br />
-			<span>封面图片地址</span><br />
+			<span>封面图片</span><br />
 			<input type="text" id="webpic" value="" onfocus=" this.select();" style="width:768px;"/><br />
 		</div>
-		<div id='pic'>图片预览区</div>
+		<div id='pic'>图片预览区...</div>
 	<hr />
   <footer>
    <p>Cara 2015 制作</p>
    <script type="text/javascript">
 		function getv(){
+			document.getElementsByTagName("body")[0].style.cursor="wait";
 			var url = "https://php54-feelsix.rhcloud.com/x3vurl/index.php?cb=showv&h="+ document.getElementById("webhost").value + "&c=" + document.getElementById("webcode").value;
 			var script = document.createElement('script');
 			script.type="text/javascript"; 
@@ -50,6 +51,7 @@
 			document.getElementById("webmp4").value=result.mp4;
 			document.getElementById("webflv").value=result.flv;
 			document.getElementById("webpic").value=result.pic;
+			document.getElementsByTagName("body")[0].style.cursor="auto";
 			loadpic(result.pic);
 		}
 		function urljx(){
@@ -67,7 +69,7 @@
 		function loadpic(picurl){
        var imgID = new Image(); 
        imgID.src = picurl; 
-       imgID.onload = function(){document.getElementById("pic").innerHTML = "<img src="+imgID.src+" />";}
+       imgID.onload = function(){document.getElementById("pic").innerHTML = "<span>图片预览</span><br /><img style='border-width:5px;border-style:groove;border-color:#FF9999;' src="+imgID.src+" />";}
 		}
    </script>
   </footer>
