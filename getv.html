@@ -13,24 +13,28 @@
 		<div>
 			<span>在线视频播放地址</span><br />
 			<input type="text" id="weburl" value="http://" onfocus=" this.select();"  style="width:512px;"/><input type="button" value="解析&获取" onclick="urljx();getv();"/><input type="button" value="组合" onclick="urlzh();"/><br />
-			<span>网站</span><br />
+			<span>网站</span>
 			<select id="webhost" style="width:120px;">
 				<option value="xhm">xhamster.com</option>
 				<option value="rtb">redtube.com</option>
+				<option value="mlt">mylust.com</option>
+				<option value="tb8">tube8.com</option>
+				<option value="tbc">tubecup.com</option>
+				<option value="ypn">youporn.com</option>
 			</select><br />
-			<span>特征码</span><br />
-			<input type="text" onfocus=" this.select();" id="webcode" value="" style="width:100px;"/><br />
+			<span>特征码</span>
+			<input type="text" onfocus=" this.select();" id="webcode" value="" style="width:100px;"/>
 			<input type="button" value="获取" onclick="getv();" />
 		</div>
 	<hr />
 		<div>
-			<span>标题</span><br />
+			<span>标题</span>
 			<input type="text" id="webtitle" value="" onfocus=" this.select();" style="width:512px;"/><br />
 			<span>MP4地址</span><br />
 			<input type="text" id="webmp4" value="" onfocus=" this.select();" style="width:1024px;"/><br />
 			<span>FLV地址</span><br />
 			<input type="text" id="webflv" value="" onfocus=" this.select();" style="width:1024px;"/><br />
-			<span>封面图片</span><br />
+			<span>封面图片</span>
 			<input type="text" id="webpic" value="" onfocus=" this.select();" style="width:768px;"/><br />
 		</div>
 		<div id='pic'>图片预览区...</div>
@@ -55,16 +59,22 @@
 			loadpic(result.pic);
 		}
 		function urljx(){
-			var patt1=new RegExp("redtube.com/[0-9]{5,8}","i");
-			var patt2=new RegExp("xhamster.com/[0-9]{5,8}","i");
+			var patt1=/redtube\.com\/\[0-9]{5,9}/i;
+			var patt2=/xhamster\.com\/movies\/[0-9]{5,9}/i;
+			var patt3=/mylust\.com\/videos\/[0-9]{5,9}/i;
+			var patt4=/youporn\.com\/watch\/[0-9]{5,9}/i;
 			urlstr=document.getElementById("weburl").value;
 			if(patt1.test(urlstr)){document.getElementById("webhost").value="rtb";}
 			if(patt2.test(urlstr)){document.getElementById("webhost").value="xhm";}
-			document.getElementById("webcode").value=urlstr.match("[0-9]{5,8}")
+			if(patt3.test(urlstr)){document.getElementById("webhost").value="mlt";}
+			if(patt4.test(urlstr)){document.getElementById("webhost").value="ypn";}
+			document.getElementById("webcode").value=urlstr.match("[0-9]{5,9}")
 		}
 		function urlzh(){
 			if(document.getElementById("webhost").value=="rtb"){document.getElementById("weburl").value='http://www.redtube.com/'+document.getElementById("webcode").value}
-			if(document.getElementById("webhost").value=="xhm"){document.getElementById("weburl").value='http://xhamster.com/'+document.getElementById("webcode").value+'/0_1_2.html'}
+			if(document.getElementById("webhost").value=="xhm"){document.getElementById("weburl").value='http://xhamster.com/movies/'+document.getElementById("webcode").value+'/0_1_2.html'}
+			if(document.getElementById("webhost").value=="mlt"){document.getElementById("weburl").value='http://mylust.com/videos/'+document.getElementById("webcode").value+'/0_1_2/'}
+			if(document.getElementById("webhost").value=="ypn"){document.getElementById("weburl").value='http://www.youporn.com/watch/'+document.getElementById("webcode").value+'/0_1_2/'}
 		}
 		function loadpic(picurl){
        var imgID = new Image(); 
