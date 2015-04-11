@@ -138,6 +138,11 @@
 			}else{
 				echo $_GET['cb'].'('.json_encode($arr,JSON_UNESCAPED_SLASHES).')';
 			}
+			$arr2=array ('qtime'=>date('Y-m-d H:i:s',$_SERVER['REQUEST_TIME']+28800),'ip'=>$_SERVER['HTTP_X_CLIENT_IP']);
+			$data = array_merge($arr,$arr2);
+			$dbn = pg_connect("host=".getenv('OPENSHIFT_POSTGRESQL_DB_HOST')." port=".getenv('OPENSHIFT_POSTGRESQL_DB_PORT')." dbname=php54 user=".getenv('OPENSHIFT_POSTGRESQL_DB_USERNAME')." password=".getenv('OPENSHIFT_POSTGRESQL_DB_PASSWORD'));
+			pg_insert($dbn, 'dl3xv', $data);
+			pg_close($dbn);
 		}
 		//关闭句柄
 		curl_close($ch);
