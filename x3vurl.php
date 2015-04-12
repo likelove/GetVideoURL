@@ -141,7 +141,16 @@
 			$arr2=array ('qtime'=>date('Y-m-d H:i:s',$_SERVER['REQUEST_TIME']+28800),'ip'=>$_SERVER['HTTP_X_CLIENT_IP']);
 			$data = array_merge($arr,$arr2);
 			$dbn = pg_connect("host=".getenv('OPENSHIFT_POSTGRESQL_DB_HOST')." port=".getenv('OPENSHIFT_POSTGRESQL_DB_PORT')." dbname=php54 user=".getenv('OPENSHIFT_POSTGRESQL_DB_USERNAME')." password=".getenv('OPENSHIFT_POSTGRESQL_DB_PASSWORD'));
-			pg_insert($dbn, 'dl3xv', $data);
+			//echo "select xh from dl3xv where host='".$data['host']."' and code='".$data['code']."'";
+			$result = pg_query($dbn, "select xh from dl3xv where host='".$data['host']."' and code='".$data['code']."'");
+			//var_dump (pg_fetch_array($result));
+			$cmdtuples = pg_num_rows($result);
+			//echo $cmdtuples;
+			if($cmdtuples==0) {
+				pg_insert($dbn, 'dl3xv', $data);
+			}elseif($cmdtuples==1){
+				pg_update($dbn, 'dl3xv', $data,pg_fetch_assoc($result));
+			}
 			pg_close($dbn);
 		}
 		//关闭句柄
