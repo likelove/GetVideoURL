@@ -1,4 +1,8 @@
 <?php
+//h 主机
+//c 代码
+//cb 回调函数
+//rc 是否入库记录  变量是否已经配置。若变量已存在、非空字符串或者非零，则返回 false 值；反之返回 true值。所以，当字符串的值为0时，也返回true。
 //tb8,tbc必须准确的传入附加参数才能获取网页,未处理
 //http://www.tube8.com/hardcore/jayden-jaymes%2C-juctice%2C-jon-jon-creampie/19243132/
 //http://www.tubecup.com/videos/141621/real-sex-real-joy/
@@ -55,14 +59,12 @@
 				$picadd=$mp4urladd[1];
 				$mp4add=$mp4urladd[2];
 				unset($mp4urladd);
-				if(! preg_match('/srv=http%3A%2F%2F(.+?)&file=(.+?)&image=/',$data,$flvurladd)){
-					preg_match('%url_mode=3&srv=&file=(.+?)&image=%',$data,$flvurladd);
-					$flvadd=rawurldecode($flvurladd[1]);
-				}
-				else{
-					$flvadd='http://'.$flvurladd[1].'/key='.rawurldecode($flvurladd[2]);
-				}
+				preg_match('/http%3A%5C%2F%5C%2F(.+?)%22%5D%7D&title=/',$data,$flvurladd);
+				$flvadd='http://'.str_replace('\/','/',rawurldecode($flvurladd[1]));
 				unset($flvurladd);
+				preg_match('%spriteUrl=(.+?)&spriteLen=%',$data,$spriteurladd);
+				$spriteadd=rawurldecode($spriteurladd[1]);
+				unset($spriteurladd);
 			}
 			//处理redtube
 			elseif($_GET['h']==='rtb') {
@@ -132,26 +134,28 @@
 				$flvadd='';
 			}
 			//输出json
-			$arr=array ('host'=>$_GET['h'],'code'=>$_GET['c'],'title'=>$title,'mp4'=>$mp4add,'flv'=>$flvadd,'pic'=>$picadd);
+			$arr=array ('host'=>$_GET['h'],'code'=>$_GET['c'],'title'=>html_entity_decode($title,ENT_QUOTES),'mp4'=>$mp4add,'flv'=>$flvadd,'pic'=>$picadd,'sprite'=>$spriteadd);
 			if(empty($_GET['cb'])){
 				echo json_encode($arr,JSON_UNESCAPED_SLASHES);
 			}else{
 				echo $_GET['cb'].'('.json_encode($arr,JSON_UNESCAPED_SLASHES).')';
 			}
-			$arr2=array ('qtime'=>date('Y-m-d H:i:s',$_SERVER['REQUEST_TIME']+28800),'ip'=>$_SERVER['HTTP_X_CLIENT_IP']);
-			$data = array_merge($arr,$arr2);
-			$dbn = pg_connect("host=".getenv('OPENSHIFT_POSTGRESQL_DB_HOST')." port=".getenv('OPENSHIFT_POSTGRESQL_DB_PORT')." dbname=php54 user=".getenv('OPENSHIFT_POSTGRESQL_DB_USERNAME')." password=".getenv('OPENSHIFT_POSTGRESQL_DB_PASSWORD'));
-			//echo "select xh from dl3xv where host='".$data['host']."' and code='".$data['code']."'";
-			$result = pg_query($dbn, "select xh from dl3xv where host='".$data['host']."' and code='".$data['code']."'");
-			//var_dump (pg_fetch_array($result));
-			$cmdtuples = pg_num_rows($result);
-			//echo $cmdtuples;
-			if($cmdtuples==0) {
-				pg_insert($dbn, 'dl3xv', $data);
-			}elseif($cmdtuples==1){
-				pg_update($dbn, 'dl3xv', $data,pg_fetch_assoc($result));
+			if(empty($_GET['rc'])){
+				$arr2=array ('qtime'=>date('Y-m-d H:i:s',$_SERVER['REQUEST_TIME']+28800),'ip'=>$_SERVER['HTTP_X_CLIENT_IP']);
+				$data = array_merge($arr,$arr2);
+				$dbn = pg_connect("host=".getenv('OPENSHIFT_POSTGRESQL_DB_HOST')." port=".getenv('OPENSHIFT_POSTGRESQL_DB_PORT')." dbname=php54 user=".getenv('OPENSHIFT_POSTGRESQL_DB_USERNAME')." password=".getenv('OPENSHIFT_POSTGRESQL_DB_PASSWORD'));
+				//echo "select xh from dl3xv where host='".$data['host']."' and code='".$data['code']."'";
+				$result = pg_query($dbn, "select xh from dl3xv where host='".$data['host']."' and code='".$data['code']."'");
+				//var_dump (pg_fetch_array($result));
+				$cmdtuples = pg_num_rows($result);
+				//echo $cmdtuples;
+				if($cmdtuples==0) {
+					pg_insert($dbn, 'dl3xv', $data);
+				}elseif($cmdtuples==1){
+					pg_update($dbn, 'dl3xv', $data,pg_fetch_assoc($result));
+				}
+				pg_close($dbn);
 			}
-			pg_close($dbn);
 		}
 		//关闭句柄
 		curl_close($ch);
