@@ -52,7 +52,7 @@
 			//数据处理段
 			//处理xhamster
 			if($_GET['h']==='xhm') {
-				preg_match('%<title>(.+?) - xHamster\.com</title>%',$data,$name);
+				preg_match('<title itemprop="name">(.+?): .* - xHamster</title>',$data,$name);
 				$title=$name[1];
 				unset($name);
 				preg_match('%video poster="(.+?)" type='."'video/mp4' file=".'"(.+?)" controls autoplay%',$data,$mp4urladd);
